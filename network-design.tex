@@ -7,10 +7,9 @@
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage[top=3.5cm,left=3.5cm,right=3.5cm,bottom=3.5cm]{geometry} % 'showframe' to see borders
 
-% Keywords command
-\providecommand{\keywords}[1]
-{
+\providecommand{\keywords}[1] {
   \small
   \textbf{\textit{Keywords---}} #1
 }
@@ -24,33 +23,45 @@
 
 \begin{document}
 
+  \maketitle
 
-\maketitle
+  \vspace{1cm}
 
-\vspace{1cm}
+  \begin{abstract}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et lectus vel magna luctus vestibulum nec ut eros. Curabitur suscipit ipsum quis ornare tincidunt. Suspendisse sodales dapibus ante ultricies sodales. Nam nisl erat, cursus at convallis ac, egestas non nisl. Phasellus faucibus efficitur feugiat. Morbi lectus purus, dictum ut velit ac, porttitor ultricies enim. Maecenas feugiat lorem eget mauris aliquet dapibus. Curabitur eros est, varius quis lacus sit amet, vehicula facilisis sem. Cras ut urna id ante ullamcorper ullamcorper.
+  \end{abstract}
 
-\begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et lectus vel magna luctus vestibulum nec ut eros. Curabitur suscipit ipsum quis ornare tincidunt. Suspendisse sodales dapibus ante ultricies sodales. Nam nisl erat, cursus at convallis ac, egestas non nisl. Phasellus faucibus efficitur feugiat. Morbi lectus purus, dictum ut velit ac, porttitor ultricies enim. Maecenas feugiat lorem eget mauris aliquet dapibus. Curabitur eros est, varius quis lacus sit amet, vehicula facilisis sem. Cras ut urna id ante ullamcorper ullamcorper.
-\end{abstract}
+  \vspace{0.5cm}
 
-\vspace{0.5cm}
+  \keywords{LAN - Local Area Network, DNS - Domain Name System}
 
-\keywords{one, two, three, four}
+  \newpage
 
-\newpage
+  % \tableofcontents
 
-\tableofcontents
+  % 1. Identify the vulnerabilities of the current configuration of the company’s network (as described in Section 3: paragraphs 1 & 2 and shown in Figure 1) and discuss the types of security threats/attacks this company may face.
+  % 2. Give one example of an attack that can exploit each identified vulnerability.
+  \section{System Analysis (Vulnerabilities)}
+    \subsection{Authentication}
+      \subsubsection{Replay Attack}
+        The current network is very suceptible to a replay attack with its user/password system. As there is no underyling security protocol to protect messages over the internet, a packet sniffer could be used to listen for a valid sign-in message and then that message could be re-sent by an attacker to gain access to the system.
+      \subsubsection{Dictionary Attack}
+        If an attacker manages to get hold of the endpoint used for login, then they can start using dictionry attacks to try and guess username/password combinations. This is possible due to the lack of authentication for which devices can log in to the company system.
+      \subsubsection{DNS cache poisoning}
+        Due to the current network desig, once an attacker has gained entry to an employee computer via either a Replay or Dictionary attack it is possible to then reach the DNS server via the LAN and poison its cache. It would therefore be possible to redirect any authentication traffic to an attacker-controlled server and collect the passwords of every user that tried to log in while the cache is poisoned.
 
+    \section{Design Proposal}
 
+    % The company is planning to bring online a few new web applications to revolutionize its business and would like to consolidate their authentication for all desktop machines across all sites (currently using a simple password based authentication system). In addition, the company aims to deploy an access control mechanism that allows its employees to access the resources available in the most efficient and secure way that minimizes the risk of any security breach.
 
-\section{System Analysis}
- % 1. Identify the vulnerabilities of the current configuration of the company’s network (as described in Section 3: paragraphs 1 & 2 and shown in Figure 1) and discuss the types of security threats/attacks this company may face.
+    % The CEO would like you to review how all sites are connected together (the current configuration shown in Figure 1) and propose a secure method to link them and permit remote access (e.g. from home) to desktop machines for all employees in a cost- effective way.
 
- % 2. Give one example of an attack that can exploit each identified vulnerability.
+    % You should propose a mechanism to ensure secure access to the web and email servers as well as incorporate into the current network design the capability of detecting and mitigating the impact of any potential security breaches.
 
-\newpage
+    % Finally, you should propose a solution to the challenging problem of DDoS (Distributed Denial of Service) attack that may target the company in the future.
+  \newpage
 
-\bibliographystyle{agsm}
-\bibliography{network-design}
+  \bibliographystyle{agsm}
+  \bibliography{network-design}
 
 \end{document}
