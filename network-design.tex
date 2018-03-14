@@ -33,7 +33,7 @@
 
   \vspace{0.5cm}
 
-  \keywords{LAN - Local Area Network, DNS - Domain Name System}
+  \keywords{LAN - \textit{Local Area Network}, DNS - \textit{Domain Name System}, VPN - \textit{Virtual Private Network}, TTL - \textit{Time To Live}}
 
   \newpage
 
@@ -70,7 +70,22 @@
       \paragraph{DNS cache poisoning}
         Due to the current network design, once an attacker has gained entry to an employee computer via either a Replay or Dictionary attack it is possible to then reach the DNS server via the LAN and poison its cache. It would therefore be possible to redirect any authentication traffic to an attacker-controlled server and collect the passwords of every user that tried to log in while the cache is poisoned.
 
-    \section{Design Proposal}
+    \section{Secure Network Design Proposal}
+      In order to protect against the attacks I have identified, I suggest that the following technologies be implemented.
+
+      \subsection{IPsec-ESP (VPN)}
+        In order to protect against \textbf{Replay attacks}, IPsec is an ideal solution for maintaining message authenticity. When deployed in ESP mode, all devices connecting remotely to the main network has a secure connection which can not be interfered with by attackers. Finally, re-sending the same packet would not work due to the contents of the TTL header.
+
+        This would also provide a secure connection for both \textbf{site-to-site} and \textbf{remote access}. When deployed at the site gateway, each site could connect securely to one-another by establishing a secure tunnel where data sent between sites could not be interfered with. This same principle works for remote access - each device that will be used to connect from home could be set up with IPsec tunnel, which would again establish a secure connection to the main server.
+
+      \subsection{Access-control Matrix}
+        An access-control matrix would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to access-control.
+
+      \subsection{Cost-effectiveness}
+
+    \section{Conclusion}
+
+  \newpage
 
   \bibliographystyle{agsm}
   \bibliography{network-design}
