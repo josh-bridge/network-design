@@ -42,13 +42,26 @@
   % 1. Identify the vulnerabilities of the current configuration of the company’s network (as described in Section 3: paragraphs 1 & 2 and shown in Figure 1) and discuss the types of security threats/attacks this company may face.
   % 2. Give one example of an attack that can exploit each identified vulnerability.
   \section{System Analysis (Vulnerabilities)}
-    \subsection{Authentication}
-      \subsubsection{Replay Attack}
+    \subsection{Insecure IP packets}
+      At the moment, the branches communicate to the headquarters over the internet in an insecure way. As the packets being sent over the internet are not protected, anyone could read the contents of these messages and potentially use them to attack the system. Any router or system that lies in the network path between each branch and the headquarters could intercept any message sent between them and possibly modify, remove or replay that message.
+
+      \paragraph{Replay Attack}
         The current network is very suceptible to a replay attack with its user/password system. As there is no underyling security protocol to protect messages over the internet, a packet sniffer could be used to listen for a valid sign-in message and then that message could be re-sent by an attacker to gain access to the system.
-      \subsubsection{Dictionary Attack}
+
+    \subsection{User/Password Authentication}
+      A user/password system is unsuitable for secure authentication when connecting over the internet. Usernames and passwords for users are often very simple for the sake of being able to remember them, therefore this makes them much more suceptible to being guessed by an attacker.
+
+      \paragraph{Dictionary Attack} % online/offline? what endpoint?
         If an attacker manages to get hold of the endpoint used for login, then they can start using dictionry attacks to try and guess username/password combinations. This is possible due to the lack of authentication for which devices can log in to the company system.
-      \subsubsection{DNS cache poisoning}
-        Due to the current network desig, once an attacker has gained entry to an employee computer via either a Replay or Dictionary attack it is possible to then reach the DNS server via the LAN and poison its cache. It would therefore be possible to redirect any authentication traffic to an attacker-controlled server and collect the passwords of every user that tried to log in while the cache is poisoned.
+
+    \subsection{Unprotected DNS}
+      The DNS server at the headquarters is currently located within the same LAN as the public facing servers and the office workstations. Therefore if any of these devices were to be compromised then the DNS server is very suceptible to being attacked.
+
+      \paragraph{DNS cache poisoning}
+        Due to the current network design, once an attacker has gained entry to an employee computer via either a Replay or Dictionary attack it is possible to then reach the DNS server via the LAN and poison its cache. It would therefore be possible to redirect any authentication traffic to an attacker-controlled server and collect the passwords of every user that tried to log in while the cache is poisoned.
+
+    \subsection{Unprotected Web Server}
+
 
     \section{Design Proposal}
 
