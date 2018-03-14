@@ -28,7 +28,7 @@
   \vspace{1cm}
 
   \begin{abstract}
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et lectus vel magna luctus vestibulum nec ut eros. Curabitur suscipit ipsum quis ornare tincidunt. Suspendisse sodales dapibus ante ultricies sodales. Nam nisl erat, cursus at convallis ac, egestas non nisl. Phasellus faucibus efficitur feugiat. Morbi lectus purus, dictum ut velit ac, porttitor ultricies enim. Maecenas feugiat lorem eget mauris aliquet dapibus. Curabitur eros est, varius quis lacus sit amet, vehicula facilisis sem. Cras ut urna id ante ullamcorper ullamcorper.
+
   \end{abstract}
 
   \vspace{0.5cm}
@@ -39,14 +39,24 @@
 
   % \tableofcontents
 
-  % 1. Identify the vulnerabilities of the current configuration of the company’s network (as described in Section 3: paragraphs 1 & 2 and shown in Figure 1) and discuss the types of security threats/attacks this company may face.
-  % 2. Give one example of an attack that can exploit each identified vulnerability.
-  \section{System Analysis (Vulnerabilities)}
+  \section{System Analysis (Vulnerabilities \& Attacks)}
     \subsection{Insecure IP packets}
       At the moment, the branches communicate to the headquarters over the internet in an insecure way. As the packets being sent over the internet are not protected, anyone could read the contents of these messages and potentially use them to attack the system. Any router or system that lies in the network path between each branch and the headquarters could intercept any message sent between them and possibly modify, remove or replay that message.
 
       \paragraph{Replay Attack}
         The current network is very suceptible to a replay attack with its user/password system. As there is no underyling security protocol to protect messages over the internet, a packet sniffer could be used to listen for a valid sign-in message and then that message could be re-sent by an attacker to gain access to the system.
+
+    \subsection{Unprotected Web Server}
+      The current web server is serving public clients with unprotected HTTP traffic, which is easily exploitable and a very critical vulnerability when the company is dealing with financial information. Attackers can easily trick clients in a multitude of ways into sending personal information to attacker-controlled servers.
+
+      \paragraph{Man-in-the-middle Attack} % not a company vulnerability
+        While on an unencrypted public wifi hotspot, a user may try to access the website while an attacker intercepts this unprotected traffic. The attacker could then replace the response with their own malicious server page where the user might enter personal information.
+
+    \subsection{Internal Access Control}
+      A major issue with the current network layout is that all devices in each location are grouped together within the same LAN, so any computer/server can access every other computer/server. There is no access control which could prevent resources being accessed by users who should not be able to.
+
+      \paragraph{Internal Malicious Access}
+        Either an employee with internal network access or an outside attacker who has gained access to the network is able to access all of the resources within any location. This allows the possibility of a whole host of attacks such as offline dictionary attacks \& DNS cache poisoning.
 
     \subsection{User/Password Authentication}
       A user/password system is unsuitable for secure authentication when connecting over the internet. Usernames and passwords for users are often very simple for the sake of being able to remember them, therefore this makes them much more suceptible to being guessed by an attacker.
@@ -60,19 +70,7 @@
       \paragraph{DNS cache poisoning}
         Due to the current network design, once an attacker has gained entry to an employee computer via either a Replay or Dictionary attack it is possible to then reach the DNS server via the LAN and poison its cache. It would therefore be possible to redirect any authentication traffic to an attacker-controlled server and collect the passwords of every user that tried to log in while the cache is poisoned.
 
-    \subsection{Unprotected Web Server}
-
-
     \section{Design Proposal}
-
-    % The company is planning to bring online a few new web applications to revolutionize its business and would like to consolidate their authentication for all desktop machines across all sites (currently using a simple password based authentication system). In addition, the company aims to deploy an access control mechanism that allows its employees to access the resources available in the most efficient and secure way that minimizes the risk of any security breach.
-
-    % The CEO would like you to review how all sites are connected together (the current configuration shown in Figure 1) and propose a secure method to link them and permit remote access (e.g. from home) to desktop machines for all employees in a cost- effective way.
-
-    % You should propose a mechanism to ensure secure access to the web and email servers as well as incorporate into the current network design the capability of detecting and mitigating the impact of any potential security breaches.
-
-    % Finally, you should propose a solution to the challenging problem of DDoS (Distributed Denial of Service) attack that may target the company in the future.
-  \newpage
 
   \bibliographystyle{agsm}
   \bibliography{network-design}
