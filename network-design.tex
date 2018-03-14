@@ -78,8 +78,30 @@
 
         This would also provide a secure connection for both \textbf{site-to-site} and \textbf{remote access}. When deployed at the site gateway, each site could connect securely to one-another by establishing a secure tunnel where data sent between sites could not be interfered with. This same principle works for remote access - each device that will be used to connect from home could be set up with IPsec tunnel, which would again establish a secure connection to the main server.
 
-      \subsection{Access-control Matrix}
-        An access-control matrix would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to access-control.
+      \subsection{Application-level Gateway}
+        An application-level Gateway would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones seperated by firewalls, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to not having the correct authentication to access the server.
+
+      \subsection{Additional Requirements}
+        \subsubsection{Authentication}
+          Password Hash \& Salt / Kerberos
+
+        \subsubsection{Access Control}
+          Access Control matrix
+
+        \subsubsection{Site-to-site Connection}
+          IPsec
+
+        \subsubsection{Remote Access}
+          IPsec / Kerberos
+
+        \subsubsection{Secure Web \& Email Access}
+          SSL / TLS
+
+        \subsubsection{Attack Detection / Mitigation}
+          IDS
+
+        \subsubsection{DDoS Attacks}
+          In order to protect against DDoS attacks, a \textbf{Stateful Inspection Firewall} would be ideal for filtering out requests from users which aren't trying to create a genuine session, but just to overload the servers. With a firewall like this it would greatly reduce the server load on the outbound router \& web server and stop the DDoS from having a big effect on service quality. This is because the firewall would be more equipped to deal with high load without much overhead, whereas on the web server it would have to dedicate much more resources to each request/packet.
 
       \subsection{Cost-effectiveness}
 
