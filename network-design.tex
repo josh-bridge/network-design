@@ -46,7 +46,7 @@
       \paragraph{Replay Attack}
         The current network is very suceptible to a replay attack with its user/password system. As there is no underyling security protocol to protect messages over the internet, a packet sniffer could be used to listen for a valid sign-in message and then that message could be re-sent by an attacker to gain access to the system.
 
-    \subsection{Unprotected Web Server}
+    \subsection{Unprotected Web Server} % already a requirement
       The current web server is serving public clients with unprotected HTTP traffic, which is easily exploitable and a very critical vulnerability when the company is dealing with financial information. Attackers can easily trick clients in a multitude of ways into sending personal information to attacker-controlled servers.
 
       \paragraph{Man-in-the-middle Attack} % not a company vulnerability
@@ -73,29 +73,30 @@
     \section{Secure Network Design Proposal}
       In order to protect against the attacks I have identified, I suggest that the following technologies be implemented.
 
-      \subsection{IPsec-ESP (VPN)}
-        In order to protect against \textbf{Replay attacks}, IPsec is an ideal solution for maintaining message authenticity. When deployed in ESP mode, all devices connecting remotely to the main network has a secure connection which can not be interfered with by attackers. Finally, re-sending the same packet would not work due to the contents of the TTL header.
+      \subsection{Attack Prevention}
+        \subsubsection{IPsec-ESP (VPN)}
+          In order to protect against \textbf{Replay attacks}, IPsec is an ideal solution for maintaining message authenticity. When deployed in ESP mode, all devices connecting remotely to the main network has a secure connection which can not be interfered with by attackers. Finally, re-sending the same packet would not work due to the contents of the TTL header.
 
-        This would also provide a secure connection for both \textbf{site-to-site} and \textbf{remote access}. When deployed at the site gateway, each site could connect securely to one-another by establishing a secure tunnel where data sent between sites could not be interfered with. This same principle works for remote access - each device that will be used to connect from home could be set up with IPsec tunnel, which would again establish a secure connection to the main server.
-
-      \subsection{Application-level Gateway}
-        An application-level Gateway would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones seperated by firewalls, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to not having the correct authentication to access the server.
+        \subsubsection{Application-level Gateway}
+          An application-level Gateway would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones seperated by firewalls, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to not having the correct authentication to access the server.
 
       \subsection{Additional Requirements}
+        Below are the solutions I propose for each of the additional requirements of the company.
+
         \subsubsection{Authentication}
-          Password Hash \& Salt / Kerberos
+          For authenticating users, I would suggest that a more secure form of the user/password system be implemented such as password \textbf{Hash \& Salt}. This would not require huge amounts of work as the user system is already there, but increasing the security of the password storage would be very useful for at least slowing offline \& online dictionary attacks and making sure the passwords are not sent in plaintext over the network, which could be picked up by an attacker with a packet sniffer.
 
         \subsubsection{Access Control}
           Access Control matrix
 
         \subsubsection{Site-to-site Connection}
-          IPsec
+          IPsec-ESP would provide a secure connection for both \textbf{site-to-site} and \textbf{remote access}. When deployed at the site gateway, each site could connect securely to one-another by establishing a secure tunnel where data sent between sites could not be interfered with. This same principle works for remote access - each device that will be used to connect from home could be set up with IPsec tunnel, which would again establish a secure connection to the main server.
 
         \subsubsection{Remote Access}
           IPsec / Kerberos
 
         \subsubsection{Secure Web \& Email Access}
-          SSL / TLS
+          In order to secure the connection between users and the Web \& Email servers, installing the \textbf{SSL/TLS} protocol on each server would be the best way of securing those connections. Those protocols are designed specifically for the purpose of securing connections to online resources, and they provide protection for both confidentiality and message integrity. This does not require much upkeep, once it is in place it should work for at least a year until the certificate needs to be renewed.
 
         \subsubsection{Attack Detection / Mitigation}
           IDS
