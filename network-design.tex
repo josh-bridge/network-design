@@ -46,12 +46,6 @@
       \paragraph{Replay Attack}
         The current network is very suceptible to a replay attack with its user/password system. As there is no underyling security protocol to protect messages over the internet, a packet sniffer could be used to listen for a valid sign-in message and then that message could be re-sent by an attacker to gain access to the system.
 
-    \subsection{Unprotected Web Server} % already a requirement
-      The current web server is serving public clients with unprotected HTTP traffic, which is easily exploitable and a very critical vulnerability when the company is dealing with financial information. Attackers can easily trick clients in a multitude of ways into sending personal information to attacker-controlled servers.
-
-      \paragraph{Man-in-the-middle Attack} % not a company vulnerability
-        While on an unencrypted public wifi hotspot, a user may try to access the website while an attacker intercepts this unprotected traffic. The attacker could then replace the response with their own malicious server page where the user might enter personal information.
-
     \subsection{Internal Access Control}
       A major issue with the current network layout is that all devices in each location are grouped together within the same LAN, so any computer/server can access every other computer/server. There is no access control which could prevent resources being accessed by users who should not be able to.
 
@@ -64,6 +58,12 @@
       \paragraph{Dictionary Attack} % online/offline? what endpoint?
         If an attacker manages to get hold of the endpoint used for login, then they can start using dictionry attacks to try and guess username/password combinations. This is possible due to the lack of authentication for which devices can log in to the company system.
 
+    \subsection{Insecure FTP Server}
+      The current FTP server is serving with unprotected traffic, which is easily exploitable and a very critical vulnerability when the company is dealing with financial information.
+
+      \paragraph{Packet sniffing}
+        Attackers can scan network traffic to easily pick up FTP login passwords sent in plain text, furthermore they can see the files being transferred and make a copy of any file.
+
     \subsection{Unprotected DNS}
       The DNS server at the headquarters is currently located within the same LAN as the public facing servers and the office workstations. Therefore if any of these devices were to be compromised then the DNS server is very suceptible to being attacked.
 
@@ -74,37 +74,41 @@
       In order to protect against the attacks I have identified, I suggest that the following technologies be implemented.
 
       \subsection{Attack Prevention}
-        \subsubsection{IPsec-ESP (VPN)}
+        \subsubsection{IPsec-ESP (VPN)} \label{ipsec}
           In order to protect against \textbf{Replay attacks}, IPsec is an ideal solution for maintaining message authenticity. When deployed in ESP mode, all devices connecting remotely to the main network has a secure connection which can not be interfered with by attackers. Finally, re-sending the same packet would not work due to the contents of the TTL header.
 
-        \subsubsection{Application-level Gateway}
+        \subsubsection{Application-level Gateway} \label{app-gateway}
           An application-level Gateway would be an ideal solution for protecting against \textbf{Internal Malicious Access} and therefore also protecting against \textbf{DNS Cache Poisoning} \& \textbf{Offline Dictionary Attacks}. If the networks witin the headquarters were split up into more logical zones seperated by firewalls, where only certain groups of users were permitted to cross these zones, then the likelihood of the latter two attacks would go down greatly. For example if an outside attacker has managed to gain access to an employee account within the network, they still will not be able to access the DNS server due to not having the correct authentication to access the server.
+
+        \subsubsection{SFTP (Secure File Transfer Protocol)}
+          To protect against \textbf{Insecure FTP packet sniffing}, a more secure file transfer protocol implementation is ideal. SFTP is an extension of SSH (Secure Shell) which allows for secure transfer of files over any network. This is relatively simple to set up and does not interfere with any firewall, as it only requires a single port (22) to work.
 
       \subsection{Additional Requirements}
         Below are the solutions I propose for each of the additional requirements of the company.
 
-        \subsubsection{Authentication}
+        \subsubsection{Authentication} \label{auth}
           For authenticating users, I would suggest that a more secure form of the user/password system be implemented such as password \textbf{Hash \& Salt}. This would not require huge amounts of work as the user system is already there, but increasing the security of the password storage would be very useful for at least slowing offline \& online dictionary attacks and making sure the passwords are not sent in plaintext over the network, which could be picked up by an attacker with a packet sniffer.
 
         \subsubsection{Access Control}
-          Access Control matrix
+          Using an Access control matrix is the simplest way of increasing security within a network. At the moment there is already a user system in place; with the above improvements in security for user authentication (section \ref{auth}) an access control matrix would be an ideal and efficient solution.
 
-        \subsubsection{Site-to-site Connection}
+        \subsubsection{Site-to-site Connection} \label{ipsec2}
           IPsec-ESP would provide a secure connection for both \textbf{site-to-site} and \textbf{remote access}. When deployed at the site gateway, each site could connect securely to one-another by establishing a secure tunnel where data sent between sites could not be interfered with. This same principle works for remote access - each device that will be used to connect from home could be set up with IPsec tunnel, which would again establish a secure connection to the main server.
 
         \subsubsection{Remote Access}
-          IPsec / Kerberos
+          As mentioned in sections \ref{ipsec} \& \ref{ipsec2}, IPSec VPN is a perfect solution for implementing secure remote connection to the company network. As the same technique will be used for connecting different sites, it is more or less trivial to set this up on other computers wishing to connect from remote locations. While it would require installation on each machine wishing to connect to the network, this could be seen as a positive as it enures only trusted devices will be capable of connecting.
 
         \subsubsection{Secure Web \& Email Access}
           In order to secure the connection between users and the Web \& Email servers, installing the \textbf{SSL/TLS} protocol on each server would be the best way of securing those connections. Those protocols are designed specifically for the purpose of securing connections to online resources, and they provide protection for both confidentiality and message integrity. This does not require much upkeep, once it is in place it should work for at least a year until the certificate needs to be renewed.
 
         \subsubsection{Attack Detection / Mitigation}
-          IDS
+          When trying to detect and mitigate attacks within a network, an IDS (Intrusion Detection System) is the most ideal solution. While it is not 100\% effective and can produce false positives while sometimes requiring extensive monitoring, it is a lot more efficient then hiring a human being to constantly sit and monitor many different systems for signs of an intrusion.
 
         \subsubsection{DDoS Attacks}
           In order to protect against DDoS attacks, a \textbf{Stateful Inspection Firewall} would be ideal for filtering out requests from users which aren't trying to create a genuine session, but just to overload the servers. With a firewall like this it would greatly reduce the server load on the outbound router \& web server and stop the DDoS from having a big effect on service quality. This is because the firewall would be more equipped to deal with high load without much overhead, whereas on the web server it would have to dedicate much more resources to each request/packet.
 
       \subsection{Cost-effectiveness}
+        While my proposed solution may require a lot of initial set-up/configuration, I feel that the solutions I have suggested are used in an efficient way due to their re-use against multiple attack vectors. For example the Application-level Gateway (section \ref{app-gateway}) protects against 3 of the identified security vulnerabilities due to their cascasding nature.
 
     \section{Conclusion}
 
